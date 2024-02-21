@@ -3,11 +3,8 @@ import { z } from 'zod'
 import { knex } from '../database'
 import { randomUUID } from 'node:crypto'
 import { checkIfSessionIdExists } from '../middlewares/check-session-id-exists'
-import { checkGlobalPreHandler } from '../middlewares/global-log-preHandler'
 
 export async function transactionsRoutes(app: FastifyInstance) {
-  app.addHook('preHandler', checkGlobalPreHandler)
-
   app.get('/', { preHandler: [checkIfSessionIdExists] }, async (request) => {
     const { sessionID } = request.cookies
     const transactions = await knex('transactions')
